@@ -10,6 +10,7 @@ find_package(range-v3 REQUIRED)
 find_package(cxxopts REQUIRED)
 
 add_library(fibo src/main.cpp)
+target_include_directories(fibo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(fibo PRIVATE cxx_std_17)
 
 target_link_libraries(fibo
