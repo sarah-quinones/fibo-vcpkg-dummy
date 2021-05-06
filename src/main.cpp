@@ -1,6 +1,6 @@
 #include "fibo/fibo.hpp"
 #include <cxxopts.hpp>
-#include <fmt/format.h>
+#include <fmt/core.h>
 #include <range/v3/view.hpp>
 
 namespace view = ranges::views;
@@ -14,6 +14,8 @@ int fib(int x) {
     a += b;
     b = tmp;
   }
+
+  fmt::print("{}\n", x);
 
   return a;
 }

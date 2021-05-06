@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
-  CACHE STRING "Vcpkg toolchain file")
+set(CMAKE_TOOLCHAIN_FILE
+    ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
+    CACHE STRING "Vcpkg toolchain file"
+)
 
 project(fibo CXX)
 
@@ -9,27 +11,31 @@ find_package(fmt REQUIRED)
 find_package(range-v3 REQUIRED)
 find_package(cxxopts REQUIRED)
 
-add_library(fibo src/main.cpp)
+add_library(fibo STATIC src/main.cpp)
 add_library(fibo::fibo ALIAS fibo)
 
 # target_include_directories(fibo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(fibo PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
-    $<INSTALL_INTERFACE:include/>  # <prefix>/include/mylib
+target_include_directories(
+  fibo PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
+              $<INSTALL_INTERFACE:include/> # <prefix>/include/mylib
 )
 target_compile_features(fibo PRIVATE cxx_std_17)
 
-target_link_libraries(fibo
-  PRIVATE
-    fmt::fmt
-    range-v3::range-v3
-    cxxopts::cxxopts)
+target_link_libraries(fibo PUBLIC fmt::fmt range-v3::range-v3 cxxopts::cxxopts)
 
-install(TARGETS fibo EXPORT fiboConfig)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/fibo DESTINATION include)
+include(GNUInstallDirs)
+install(TARGETS fibo EXPORT fiboTargets)
 
-install(EXPORT fiboConfig
-        NAMESPACE fibo::
-        DESTINATION share/fibo)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/fibo
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
-export(EXPORT fiboConfig NAMESPACE fibo::)
+install(
+  EXPORT fiboTargets
+  FILE fiboTargets.cmake
+  NAMESPACE fibo::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fibo
+)
+install(FILES fiboConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fibo)
+
+export(EXPORT fiboTargets NAMESPACE fibo::)
