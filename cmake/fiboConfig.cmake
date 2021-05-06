@@ -1,3 +1,5 @@
 include(CMakeFindDependencyMacro)
-find_dependency(Foo)
+find_dependency(fmt)
+find_dependency(range-v3)
+find_dependency(cxxopts)
 include("${CMAKE_CURRENT_LIST_DIR}/fiboTargets.cmake")
