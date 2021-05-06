@@ -30,6 +30,6 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/fibo DESTINATION include)
 
 install(EXPORT fiboConfig
         NAMESPACE fibo::
-        DESTINATION lib/cmake/fibo)
+        DESTINATION share/fibo)
 
 export(EXPORT fiboConfig NAMESPACE fibo::)
