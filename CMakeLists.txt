@@ -36,6 +36,6 @@ install(
   NAMESPACE fibo::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fibo
 )
-install(FILES fiboConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fibo)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/fiboConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fibo)
 
 export(EXPORT fiboTargets NAMESPACE fibo::)
