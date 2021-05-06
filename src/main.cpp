@@ -1,3 +1,4 @@
+#include "fibo.hpp"
 #include <cxxopts.hpp>
 #include <fmt/format.h>
 #include <range/v3/view.hpp>
