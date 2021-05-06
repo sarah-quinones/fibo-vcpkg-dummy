@@ -12,8 +12,11 @@ find_package(cxxopts REQUIRED)
 add_library(fibo src/main.cpp)
 add_library(fibo::fibo ALIAS fibo)
 
-target_include_directories(fibo INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(fibo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+# target_include_directories(fibo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(fibo PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
+    $<INSTALL_INTERFACE:include/>  # <prefix>/include/mylib
+)
 target_compile_features(fibo PRIVATE cxx_std_17)
 
 target_link_libraries(fibo
@@ -22,5 +25,11 @@ target_link_libraries(fibo
     range-v3::range-v3
     cxxopts::cxxopts)
 
-install(TARGETS fibo)
+install(TARGETS fibo EXPORT fiboConfig)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/fibo DESTINATION include)
+
+install(EXPORT fiboConfig
+        NAMESPACE fibo::
+        DESTINATION lib/cmake/fibo)
+
+export(EXPORT fiboConfig NAMESPACE fibo::)
